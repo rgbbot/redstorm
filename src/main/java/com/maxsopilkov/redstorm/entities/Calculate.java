@@ -1,4 +1,4 @@
-package com.maxsopilkov.redstorm;
+package com.maxsopilkov.redstorm.entities;
 
 public class Calculate {
     private final long id;
