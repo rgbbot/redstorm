@@ -57,4 +57,29 @@ public class GDP {
     public void setYear2016(String year2016) {
         this.year2016 = year2016;
     }
+
+    @Override
+    public String toString() {
+        if (this != null) {
+            String result = "";
+            if (this.getYear2012() != null) {
+                result += " - 2012: " + this.getYear2012() + "\n";
+            }
+            if (this.getYear2013() != null) {
+                result += " - 2013: " + this.getYear2013() + "\n";
+            }
+            if (this.getYear2014() != null) {
+                result += " - 2014: " + this.getYear2014() + "\n";
+            }
+            if (this.getYear2015() != null) {
+                result += " - 2015: " + this.getYear2015() + "\n";
+            }
+            if (this.getYear2016() != null) {
+                result += " - 2016: " + this.getYear2016() + "\n";
+            }
+            return result;
+        } else {
+            return "No Data.";
+        }
+    }
 }

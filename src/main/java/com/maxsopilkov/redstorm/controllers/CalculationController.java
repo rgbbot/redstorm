@@ -50,33 +50,23 @@ public class CalculationController {
         System.out.println(json);
 
         /**
-         * TODO: 1) Receive post message
+         * TODO: 1) Receive post message - DONE
          * TODO: 2) Build the Bayessian Network
          * TODO: 3) Teach it
          * TODO: 4) Collect results
          */
 
+        // Fetch all countries and map it using Jackson
         List<Country> countries = new ArrayList<>();
         try {
             countries = new ObjectMapper().readValue(json, new TypeReference<List<Country>>() {});
         } catch (IOException e) {
             e.printStackTrace();
         }
+//        for(Country country : countries) {
+//            System.out.println(country.toString());
+//        }
 
-        for(Country country : countries) {
-            System.out.println("----------------------------------------------");
-            System.out.println(country.getName());
-            System.out.println(country.getGdp().getYear2012());
-            System.out.println(country.getUnempl());
-            System.out.println(country.getHdi());
-            System.out.println(country.getIoh());
-            System.out.println(country.getArmy());
-            System.out.println(country.getMilexp());
-            System.out.println(country.getResources());
-            System.out.println(country.getConflicts());
-            System.out.println(country.getNuclear());
-            System.out.println("----------------------------------------------");
-        }
 
         // This returns a JSON or XML with the users
         return calculationRepository.findAll();
