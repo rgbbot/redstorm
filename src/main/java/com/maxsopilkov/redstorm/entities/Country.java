@@ -14,27 +14,11 @@ public class Country {
     private Integer resources;
     private Integer conflicts;
     private Boolean nuclear;
-
-    @Override
-    public String toString() {
-        String result = this.getName();
-        return "----------------------------------------------\n" +
-                "Name: '" + this.getName() + "',\n" +
-                "GDP: " + this.getGdp().toString() + "" +
-                "Unemployment rate: '" + this.getUnempl() + "',\n" +
-                "Human Development Index: '" + this.getHdi() + "',\n" +
-                "Index Of Happiness: '" + this.getIoh() + "',\n" +
-                "Army Count: '" + this.getArmy() + "',\n" +
-                "Military expeditures per capita: '" + this.getMilexp() + "',\n" +
-                "Resources: '" + this.getResources() + "',\n" +
-                "Conflicts: '" + this.getHdi() + "',\n" +
-                "Nuclear: '" + this.getNuclear() + "',\n" +
-                "----------------------------------------------";
-    }
+    private Boolean inWar;
 
     public Country() {};
 
-    public Country(String name, GDP gdp, Double unempl, Double hdi, Double ioh, Integer army, Double milexp, Integer resources, Integer conflicts, Boolean nuclear) {
+    public Country(String name, GDP gdp, Double unempl, Double hdi, Double ioh, Integer army, Double milexp, Integer resources, Integer conflicts, Boolean nuclear, Boolean inWar) {
         this.name = name;
         this.gdp = gdp;
         this.unempl = unempl;
@@ -45,6 +29,7 @@ public class Country {
         this.resources = resources;
         this.conflicts = conflicts;
         this.nuclear = nuclear;
+        this.inWar = inWar;
     }
 
     public String getName() {
@@ -127,5 +112,29 @@ public class Country {
         this.nuclear = nuclear;
     }
 
+    public Boolean getInWar() {
+        return inWar;
+    }
+
+    public void setInWar(Boolean inWar) {
+        this.inWar = inWar;
+    }
+
+    @Override
+    public String toString() {
+        String result = this.getName();
+        return "----------------------------------------------\n" +
+                "Name: '" + this.getName() + "',\n" +
+                "GDP: " + this.getGdp().toString() + "" +
+                "Unemployment rate: '" + this.getUnempl() + "',\n" +
+                "Human Development Index: '" + this.getHdi() + "',\n" +
+                "Index Of Happiness: '" + this.getIoh() + "',\n" +
+                "Army Count: '" + this.getArmy() + "',\n" +
+                "Military expeditures per capita: '" + this.getMilexp() + "',\n" +
+                "Resources: '" + this.getResources() + "',\n" +
+                "Conflicts: '" + this.getHdi() + "',\n" +
+                "Nuclear: '" + this.getNuclear() + "',\n" +
+                "----------------------------------------------";
+    }
 
 }

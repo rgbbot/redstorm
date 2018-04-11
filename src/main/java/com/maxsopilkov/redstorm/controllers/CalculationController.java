@@ -2,6 +2,7 @@ package com.maxsopilkov.redstorm.controllers;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.maxsopilkov.redstorm.bayess.BayessProbability;
 import com.maxsopilkov.redstorm.entities.Country;
 import com.maxsopilkov.redstorm.entities.Result;
 import com.maxsopilkov.redstorm.repositories.CalculationRepository;
@@ -39,7 +40,8 @@ public class CalculationController {
      *        "milexp": 3000,
      *        "resources": 30,
      *        "conflicts": 2,
-     *        "nuclear": true
+     *        "nuclear": true,
+     *        "inWar": false
      *  }
      * ]
      * @return
@@ -63,9 +65,8 @@ public class CalculationController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-//        for(Country country : countries) {
-//            System.out.println(country.toString());
-//        }
+
+        BayessProbability.run();
 
 
         // This returns a JSON or XML with the users
