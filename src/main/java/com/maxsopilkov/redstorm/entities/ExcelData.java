@@ -1,6 +1,13 @@
 package com.maxsopilkov.redstorm.entities;
 
-public class Country {
+import javax.persistence.*;
+
+//@Entity
+//@Table(name = "excel_data")
+public class ExcelData {
+//    @Id
+//    @GeneratedValue(strategy= GenerationType.AUTO)
+    private Integer id;
     private String name;
     private GDP gdp;
     private Double unempl;
@@ -13,9 +20,9 @@ public class Country {
     private Boolean nuclear;
     private Boolean inWar;
 
-    public Country() {};
+    public ExcelData() {}
 
-    public Country(String name, GDP gdp, Double unempl, Double hdi, Double ioh, Integer army, Double milexp, Integer resources, Integer conflicts, Boolean nuclear, Boolean inWar) {
+    public ExcelData(String name, GDP gdp, Double unempl, Double hdi, Double ioh, Integer army, Double milexp, Integer resources, Integer conflicts, Boolean nuclear, Boolean inWar) {
         this.name = name;
         this.gdp = gdp;
         this.unempl = unempl;
@@ -27,6 +34,14 @@ public class Country {
         this.conflicts = conflicts;
         this.nuclear = nuclear;
         this.inWar = inWar;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -116,22 +131,4 @@ public class Country {
     public void setInWar(Boolean inWar) {
         this.inWar = inWar;
     }
-
-    @Override
-    public String toString() {
-        String result = this.getName();
-        return "----------------------------------------------\n" +
-                "Name: '" + this.getName() + "',\n" +
-                "GDP: " + this.getGdp().toString() + "" +
-                "Unemployment rate: '" + this.getUnempl() + "',\n" +
-                "Human Development Index: '" + this.getHdi() + "',\n" +
-                "Index Of Happiness: '" + this.getIoh() + "',\n" +
-                "Army Count: '" + this.getArmy() + "',\n" +
-                "Military expeditures per capita: '" + this.getMilexp() + "',\n" +
-                "Resources: '" + this.getResources() + "',\n" +
-                "Conflicts: '" + this.getHdi() + "',\n" +
-                "Nuclear: '" + this.getNuclear() + "',\n" +
-                "----------------------------------------------";
-    }
-
 }

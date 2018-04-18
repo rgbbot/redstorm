@@ -3,9 +3,9 @@ package com.maxsopilkov.redstorm.controllers;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.maxsopilkov.redstorm.bayess.BayessProbability;
+import com.maxsopilkov.redstorm.entities.CalculationResult;
 import com.maxsopilkov.redstorm.entities.Country;
-import com.maxsopilkov.redstorm.entities.Result;
-import com.maxsopilkov.redstorm.repositories.CalculationRepository;
+import com.maxsopilkov.redstorm.repositories.CalculationResultRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +19,7 @@ import java.util.List;
 public class CalculationController {
 
     @Autowired
-    private CalculationRepository calculationRepository;
+    private CalculationResultRepository calculationResultRepository;
 
     /**
      * Message Body
@@ -47,13 +47,13 @@ public class CalculationController {
      * @return
      */
     @PostMapping(path="/new")
-    public @ResponseBody Iterable<Result> getParams(@RequestBody String json) {
+    public @ResponseBody Iterable<CalculationResult> getParams(@RequestBody String json) {
 
         System.out.println(json);
 
         /**
          * TODO: 1) Receive post message - DONE
-         * TODO: 2) Build the Bayessian Network
+         * TODO: 2) Build the Bayessian Network - DONE
          * TODO: 3) Teach it
          * TODO: 4) Collect results
          */
@@ -66,10 +66,21 @@ public class CalculationController {
             e.printStackTrace();
         }
 
-        BayessProbability.run();
+        //TODO: Dump data into DB with data from front
+
+        // Send data to bayess calculation
+        double[] probability = BayessProbability.run(countries);
+
+        CalculationResult res = new CalculationResult();
+        res.setBayessTrue(probability[0]);
+        res.setBayessFalse(probability[1]);
+        res.setNnTrue(0.4);
+        res.setNnFalse(0.6);
+        calculationResultRepository.save(res);
+        System.out.println("Saved!");
 
 
         // This returns a JSON or XML with the users
-        return calculationRepository.findAll();
+        return calculationResultRepository.findAll();
     }
 }
