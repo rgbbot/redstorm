@@ -1,4 +1,4 @@
-package com.maxsopilkov.redstorm;
+package com.maxsopilkov.redstorm.config;
 
 import org.apache.tomcat.dbcp.dbcp.BasicDataSource;
 import org.hibernate.SessionFactory;
@@ -12,6 +12,7 @@ import org.springframework.dao.annotation.PersistenceExceptionTranslationPostPro
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+
 
 import javax.sql.DataSource;
 import java.util.Properties;
@@ -30,7 +31,7 @@ public class PersistenceConfig {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(restDataSource());
         sessionFactory.setPackagesToScan(
-                new String[] { "org.baeldung.spring.persistence.model" });
+                new String[] { "com.maxsopilkov.redstorm" });
         sessionFactory.setHibernateProperties(hibernateProperties());
 
         return sessionFactory;

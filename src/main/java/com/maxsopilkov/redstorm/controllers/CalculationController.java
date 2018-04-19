@@ -6,8 +6,6 @@ import com.maxsopilkov.redstorm.bayess.BayessProbability;
 import com.maxsopilkov.redstorm.dao.CalculationResultDAO;
 import com.maxsopilkov.redstorm.entities.CalculationResult;
 import com.maxsopilkov.redstorm.entities.Country;
-import com.maxsopilkov.redstorm.repositories.CalculationResultRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
