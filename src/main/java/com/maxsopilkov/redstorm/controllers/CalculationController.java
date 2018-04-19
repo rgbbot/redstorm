@@ -3,6 +3,7 @@ package com.maxsopilkov.redstorm.controllers;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.maxsopilkov.redstorm.bayess.BayessProbability;
+import com.maxsopilkov.redstorm.dao.CalculationResultDAO;
 import com.maxsopilkov.redstorm.entities.CalculationResult;
 import com.maxsopilkov.redstorm.entities.Country;
 import com.maxsopilkov.redstorm.repositories.CalculationResultRepository;
@@ -18,8 +19,9 @@ import java.util.List;
 @RequestMapping(path="/calculation")
 public class CalculationController {
 
-    @Autowired
-    private CalculationResultRepository calculationResultRepository;
+//    @Autowired
+//    private CalculationResultRepository calculationResultRepository;
+    private CalculationResultDAO calculationResultDAO;
 
     /**
      * Message Body
@@ -47,15 +49,15 @@ public class CalculationController {
      * @return
      */
     @PostMapping(path="/new")
-    public @ResponseBody Iterable<CalculationResult> getParams(@RequestBody String json) {
+    public @ResponseBody /*Iterable<CalculationResult>*/ void getParams(@RequestBody String json) {
 
         System.out.println(json);
 
         /**
          * TODO: 1) Receive post message - DONE
          * TODO: 2) Build the Bayessian Network - DONE
-         * TODO: 3) Teach it
-         * TODO: 4) Collect results
+         * TODO: 3) Teach it - DONE
+         * TODO: 4) Collect results for all countries and send them to front
          */
 
         // Fetch all countries and map it using Jackson
@@ -67,20 +69,27 @@ public class CalculationController {
         }
 
         //TODO: Dump data into DB with data from front
+        //TODO: Make foreign key on country
 
         // Send data to bayess calculation
-        double[] probability = BayessProbability.run(countries);
+        List<BayessProbability> probabilities = BayessProbability.calculateBayess(countries);
 
-        CalculationResult res = new CalculationResult();
-        res.setBayessTrue(probability[0]);
-        res.setBayessFalse(probability[1]);
-        res.setNnTrue(0.4);
-        res.setNnFalse(0.6);
-        calculationResultRepository.save(res);
-        System.out.println("Saved!");
+        for (BayessProbability probability : probabilities) {
+            CalculationResult res = new CalculationResult();
+            res.setCountryName(probability.getCountryName());
+            res.setBayessTrue(probability.getProbabilities()[0]);
+            res.setBayessFalse(probability.getProbabilities()[1]);
+            res.setNnTrue(0.4);
+            res.setNnFalse(0.6);
+            calculationResultDAO.save(res);
+            System.out.println("Saved!");
+        }
+
+        System.out.println("SavedAll!");
 
 
-        // This returns a JSON or XML with the users
-        return calculationResultRepository.findAll();
+//        //TODO: Write a query that will fetch latest forecasts
+//        // This returns a JSON or XML with the users
+//        return calculationResultDAO.findAll();
     }
 }

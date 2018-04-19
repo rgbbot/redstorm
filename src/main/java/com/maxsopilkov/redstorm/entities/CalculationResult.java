@@ -9,6 +9,7 @@ public class CalculationResult {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Integer id;
+    private String countryName;
     private double bayessTrue;
     private double bayessFalse;
     private double nnTrue;
@@ -20,6 +21,14 @@ public class CalculationResult {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getCountryName() {
+        return countryName;
+    }
+
+    public void setCountryName(String countryName) {
+        this.countryName = countryName;
     }
 
     public double getBayessTrue() {
