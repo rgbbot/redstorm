@@ -5,7 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.maxsopilkov.redstorm.bayess.BayessProbability;
 import com.maxsopilkov.redstorm.entities.CalculationResult;
 import com.maxsopilkov.redstorm.entities.Country;
+import com.maxsopilkov.redstorm.neuralnetwork.NeuralNetwork;
+import com.maxsopilkov.redstorm.neuralnetwork.callback.INeuralNetworkCallback;
+import com.maxsopilkov.redstorm.neuralnetwork.entity.Result;
+import com.maxsopilkov.redstorm.neuralnetwork.utils.DataUtils;
 import com.maxsopilkov.redstorm.repositories.CalculationResultRepository;
+import com.maxsopilkov.redstorm.neuralnetwork.entity.Error;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +19,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @Controller
 @RequestMapping(path="/calculation")
 public class CalculationController {
@@ -40,7 +46,7 @@ public class CalculationController {
      *        "army": 5000,
      *        "milexp": 3000,
      *        "resources": 30,
-     *        "conflicts": 2,
+     *        "aggression": 2,
      *        "nuclear": true,
      *        "inWar": false
      *  }
@@ -59,6 +65,8 @@ public class CalculationController {
          * TODO: 4) Collect results for all countries and send them to front - DONE
          */
 
+
+
         // Fetch all countries and map it using Jackson
         List<Country> countries = new ArrayList<>();
         try {
@@ -76,8 +84,8 @@ public class CalculationController {
         for (BayessProbability probability : probabilities) {
             CalculationResult res = new CalculationResult();
             res.setCountryName(probability.getCountryName());
-            res.setBayessTrue(probability.getProbabilities()[0]);
-            res.setBayessFalse(probability.getProbabilities()[1]);
+            res.setBayessTrue(probability.getTrueProb());
+            res.setBayessFalse(probability.getFalseProb());
             res.setNnTrue(0.4);
             res.setNnFalse(0.6);
             calculationResultRepository.save(res);
@@ -85,6 +93,27 @@ public class CalculationController {
         }
 
         System.out.println("SavedAll!");
+
+        System.out.println("=========================Starting neural network sample...====================== ");
+        float[][] x = DataUtils.readInputsFromFile("src\\main\\resources\\data\\x.txt");
+        int[] t = DataUtils.readOutputsFromFile("src\\main\\resources\\data\\t.txt");
+
+        //TODO: Change x
+        NeuralNetwork neuralNetwork = new NeuralNetwork(x, t, new INeuralNetworkCallback() {
+            @Override
+            public void success(Result result) {
+                float[] valueToPredict = new float[] {-0.205f, 0.780f};
+                System.out.println("Success percentage: " + result.getSuccessPercentage());
+                System.out.println("Predicted result: " + result.predictValue(valueToPredict));
+            }
+
+            @Override
+            public void failure(Error error) {
+                System.out.println("Error: " + error.getDescription());
+            }
+        });
+
+        neuralNetwork.startLearning();
 
 
         //TODO: Write a query that will fetch latest forecasts

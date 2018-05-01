@@ -9,13 +9,13 @@ public class Country {
     private Integer army;
     private Double milexp;
     private Integer resources;
-    private Integer conflicts;
+    private Integer aggression;
     private Boolean nuclear;
     private Boolean inWar;
 
     public Country() {};
 
-    public Country(String name, GDP gdp, Double unempl, Double hdi, Double ioh, Integer army, Double milexp, Integer resources, Integer conflicts, Boolean nuclear, Boolean inWar) {
+    public Country(String name, GDP gdp, Double unempl, Double hdi, Double ioh, Integer army, Double milexp, Integer resources, Integer aggression, Boolean nuclear, Boolean inWar) {
         this.name = name;
         this.gdp = gdp;
         this.unempl = unempl;
@@ -24,7 +24,7 @@ public class Country {
         this.army = army;
         this.milexp = milexp;
         this.resources = resources;
-        this.conflicts = conflicts;
+        this.aggression = aggression;
         this.nuclear = nuclear;
         this.inWar = inWar;
     }
@@ -93,12 +93,12 @@ public class Country {
         this.resources = resources;
     }
 
-    public Integer getConflicts() {
-        return conflicts;
+    public Integer getAggression() {
+        return aggression;
     }
 
-    public void setConflicts(Integer conflicts) {
-        this.conflicts = conflicts;
+    public void setAggression(Integer aggression) {
+        this.aggression = aggression;
     }
 
     public Boolean getNuclear() {
@@ -129,7 +129,7 @@ public class Country {
                 "Army Count: '" + this.getArmy() + "',\n" +
                 "Military expeditures per capita: '" + this.getMilexp() + "',\n" +
                 "Resources: '" + this.getResources() + "',\n" +
-                "Conflicts: '" + this.getHdi() + "',\n" +
+                "Aggression: '" + this.getAggression() + "',\n" +
                 "Nuclear: '" + this.getNuclear() + "',\n" +
                 "----------------------------------------------";
     }

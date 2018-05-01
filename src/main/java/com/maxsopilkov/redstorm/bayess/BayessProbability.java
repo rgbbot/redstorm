@@ -15,13 +15,15 @@ import java.util.*;
 public class BayessProbability {
 
     private String countryName;
-    private double[] probabilities;
+    private double trueProb;
+    private double falseProb;
 
     public BayessProbability() {}
 
-    public BayessProbability(String countryName, double[] probabilities) {
+    public BayessProbability(String countryName, double trueProb, double falseProb) {
         this.countryName = countryName;
-        this.probabilities = probabilities;
+        this.trueProb = trueProb;
+        this.falseProb = falseProb;
     }
 
     public String getCountryName() {
@@ -32,12 +34,20 @@ public class BayessProbability {
         this.countryName = countryName;
     }
 
-    public double[] getProbabilities() {
-        return probabilities;
+    public double getFalseProb() {
+        return falseProb;
     }
 
-    public void setProbabilities(double[] probabilities) {
-        this.probabilities = probabilities;
+    public void setFalseProb(double falseProb) {
+        this.falseProb = falseProb;
+    }
+
+    public double getTrueProb() {
+        return trueProb;
+    }
+
+    public void setTrueProb(double trueProb) {
+        this.trueProb = trueProb;
     }
 
     public static List<BayessProbability> calculateBayess(List<Country> countries) {
@@ -46,15 +56,15 @@ public class BayessProbability {
 
         BayesNet net = new BayesNet();
 
-        // Conflicts
-        BayesNode conflicts = net.createNode("conflicts");
-        conflicts.addOutcomes("0", "1-2", "3+");
-        conflicts.setProbabilities(0.7, 0.35, 0.05);
+        // Aggression
+        BayesNode aggression = net.createNode("aggression");
+        aggression.addOutcomes("0", "1-2", "3+");
+        aggression.setProbabilities(0.7, 0.35, 0.05);
 
         // Resources
         BayesNode resources = net.createNode("resources");
         resources.addOutcomes("none", "few", "lot");
-        resources.setParents(Arrays.asList(conflicts));
+        resources.setParents(Arrays.asList(aggression));
 
         resources.setProbabilities(
                 0.7, 0.25, 0.05, // conflicts == 0
@@ -65,7 +75,7 @@ public class BayessProbability {
         // GDP
         BayesNode gdp = net.createNode("gdp");
         gdp.addOutcomes("<5K", "5K-10K", "10K-30K", "30K-50K", "50K+");
-        gdp.setParents(Arrays.asList(conflicts));
+        gdp.setParents(Arrays.asList(aggression));
         gdp.setProbabilities(
                 0.2, 0.15, 0.15, 0.2, 0.3, // conflicts == 0
                 0.15, 0.3, 0.3, 0.1, 0.15, // conflicts == 1-2
@@ -75,7 +85,7 @@ public class BayessProbability {
         // Nuclear
         BayesNode nuclear = net.createNode("nuclear");
         nuclear.addOutcomes("true", "false");
-        nuclear.setParents(Arrays.asList(conflicts));
+        nuclear.setParents(Arrays.asList(aggression));
 
         nuclear.setProbabilities(
                 0.8, 0.2, // conflicts == 0
@@ -182,17 +192,22 @@ public class BayessProbability {
 
             //TODO: Do for current country, check if it makes forecast, do for all countries, dump forecast values into DB.
 
-            evidence.put(conflicts, BayessEvidenceAdapter.fetchConflicts(country.getConflicts()));
+            evidence.put(aggression, BayessEvidenceAdapter.fetchAggression(country.getAggression()));
             evidence.put(resources, BayessEvidenceAdapter.fetchResources(country.getResources()));
             evidence.put(gdp, BayessEvidenceAdapter.fetchGDP(country.getGdp()));
             evidence.put(nuclear, BayessEvidenceAdapter.fetchNuclear(country.getNuclear()));
+            evidence.put(army, BayessEvidenceAdapter.fetchArmyCount(country.getArmy()));
+            evidence.put(milexp, BayessEvidenceAdapter.fetchMilitaryExp(country.getMilexp()));
+            evidence.put(hdi, BayessEvidenceAdapter.fetchHDI(country.getHdi()));
+            evidence.put(unempl, BayessEvidenceAdapter.fetchUnemployment(country.getUnempl()));
+            evidence.put(ioh, BayessEvidenceAdapter.fetchIOH(country.getIoh()));
 
 
             inferer.setEvidence(evidence);
 
             double[] beliefsInWar = inferer.getBeliefs(war);
 
-            BayessProbability bayessProbability = new BayessProbability(country.getName(), beliefsInWar);
+            BayessProbability bayessProbability = new BayessProbability(country.getName(), beliefsInWar[0], beliefsInWar[1]);
             bayessResults.add(bayessProbability);
 
         }

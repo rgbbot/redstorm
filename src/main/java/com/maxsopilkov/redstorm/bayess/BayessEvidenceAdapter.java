@@ -5,7 +5,7 @@ import com.maxsopilkov.redstorm.entities.GDP;
 public final class BayessEvidenceAdapter {
     private BayessEvidenceAdapter() {}
 
-    public static String fetchConflicts(Integer num) {
+    public static String fetchAggression(Integer num) {
         if (num == 0) {
             return "0";
         } else if (num >= 1 || num < 3) {
