@@ -15,7 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +29,9 @@ public class CalculationController {
 
     @Autowired
     private CalculationResultRepository calculationResultRepository;
+
+    @Autowired
+    private EntityManager entityManager;
 
 
     /**
@@ -115,9 +121,15 @@ public class CalculationController {
 
         neuralNetwork.startLearning();
 
+        //TODO: Write a query that will fetch latest forecasts - DONE
 
-        //TODO: Write a query that will fetch latest forecasts
+        final String RELEVANT_DATA = "select country_name, bayess_true, bayess_false, nn_true, nn_false from (select *, row_number() over(partition by country_name order by insert_date desc) as rn from calculation_result) as T where rn = 1";
+
+        Query q = entityManager.createNativeQuery(RELEVANT_DATA, "CalculationResultValueMapping");
+        List<CalculationResult> calculationResultList = q.getResultList();
+        Iterable<CalculationResult> iterable = calculationResultList;
+
         // This returns a JSON or XML with the users
-        return calculationResultRepository.findAll();
+        return iterable;
     }
 }

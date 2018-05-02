@@ -4,11 +4,22 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "calculation_result")
+@SqlResultSetMapping(
+        name = "CalculationResultValueMapping",
+        classes = @ConstructorResult(
+                targetClass = CalculationResult.class,
+                columns = {
+                        @ColumnResult(name = "country_name", type = String.class),
+                        @ColumnResult(name = "bayess_true", type = double.class),
+                        @ColumnResult(name = "bayess_false", type = double.class),
+                        @ColumnResult(name = "nn_true", type = double.class),
+                        @ColumnResult(name = "nn_false", type = double.class)}))
 public class CalculationResult {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Integer id;
+
     private String countryName;
     private double bayessTrue;
     private double bayessFalse;
@@ -63,7 +74,13 @@ public class CalculationResult {
         this.nnFalse = nnFalse;
     }
 
+    public CalculationResult(String countryName, double bayessTrue, double bayessFalse, double nnTrue, double nnFalse) {
+        this.countryName = countryName;
+        this.bayessTrue = bayessTrue;
+        this.bayessFalse = bayessFalse;
+        this.nnTrue = nnTrue;
+        this.nnFalse = nnFalse;
+    }
 
-
-
+    public CalculationResult() {}
 }
