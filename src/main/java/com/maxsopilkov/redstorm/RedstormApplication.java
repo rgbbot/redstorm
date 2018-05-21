@@ -5,8 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-@SpringBootApplication //(scanBasePackages = {"com.maxsopilkov"} , exclude = JpaRepositoriesAutoConfiguration.class)
-//@EnableTransactionManagement
+@SpringBootApplication
 public class RedstormApplication {
 
 	public static void main(String[] args) {

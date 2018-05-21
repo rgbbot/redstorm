@@ -8,10 +8,6 @@ import com.maxsopilkov.redstorm.entities.Country;
 
 import java.util.*;
 
-//TODO: 0) Build Bayess network - DONE
-//TODO: 1) Set return values - DONE
-//TODO: 2) Configure income params to see the probability
-
 public class BayessProbability {
 
     private String countryName;
@@ -214,6 +210,5 @@ public class BayessProbability {
 
         return bayessResults;
 
-//        System.out.println("P(war ): " + Arrays.toString(beliefsInWar));
     }
 }

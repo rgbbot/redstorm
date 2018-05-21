@@ -35,9 +35,9 @@ public class Analyzer {
      * @return float out function
      */
     private float calculateFOut(float[] x){
-        for (int i = 0;i<neurons;i++){
+        for (int i = 0; i < neurons; i++){
             float sum = 0;
-            for (int j=0; j<dimension; j++){
+            for (int j=0; j < dimension; j++){
                 sum = sum + (x[j] * wWeights[j][i]);
             }
 

@@ -36,6 +36,7 @@ dependencies {
 	runtime('com.microsoft.sqlserver:mssql-jdbc')
 	testCompile "junit:junit:4.11"
 	testCompile('org.springframework.boot:spring-boot-starter-test')
+	compile 'org.nd4j:nd4j-native:0.9.1'
 //	compile "org.apache.tomcat:tomcat-dbcp:7.0.55"
 //	compile "org.javassist:javassist:3.18.2-GA"
 //	compile "cc.kave.repackaged:cc.kave.repackaged.jayes:0.0.22"

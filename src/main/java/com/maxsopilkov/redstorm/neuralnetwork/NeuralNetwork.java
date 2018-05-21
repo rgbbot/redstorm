@@ -1,5 +1,6 @@
 package com.maxsopilkov.redstorm.neuralnetwork;
 
+import com.maxsopilkov.redstorm.entities.Country;
 import com.maxsopilkov.redstorm.neuralnetwork.callback.INeuralNetworkCallback;
 import com.maxsopilkov.redstorm.neuralnetwork.entity.Error;
 import com.maxsopilkov.redstorm.neuralnetwork.entity.Result;
@@ -9,6 +10,8 @@ import com.maxsopilkov.redstorm.neuralnetwork.parser.result.IResultParser;
 import com.maxsopilkov.redstorm.neuralnetwork.transfer.ITransferFunction;
 import com.maxsopilkov.redstorm.neuralnetwork.transfer.SigmoidFunction;
 import com.maxsopilkov.redstorm.neuralnetwork.utils.Utils;
+
+import java.util.List;
 
 /**
  * Engine of neural network. This class do all necessary work to learn from input and output data and generate a result
@@ -32,10 +35,11 @@ public class NeuralNetwork {
     private Learner learner;
     private IResultParser resultParser;
     private ITransferFunction transferFunction;
+    private static List<Country> countryList;
 
     private INeuralNetworkCallback neuralNetworkCallback = null;
 
-    public NeuralNetwork (float[][] inputs, int[] output, INeuralNetworkCallback neuralNetworkCallback) {
+    public NeuralNetwork (float[][] inputs, int[] output, List<Country> countries, INeuralNetworkCallback neuralNetworkCallback) {
         //TODO: Extend float
         bOut = Utils.randFloat(-0.5f, 0.5f);
         this.neuralNetworkCallback = neuralNetworkCallback;
@@ -53,6 +57,7 @@ public class NeuralNetwork {
         } catch (ArrayIndexOutOfBoundsException e){
             neuralNetworkCallback.failure(Error.ZERO_INPUT_ELEMENTS);
         }
+        countryList = countries;
 
         // Default num neurons = dimension
         this.neurons = dimension;
@@ -94,7 +99,7 @@ public class NeuralNetwork {
      */
     private float[] getRowElements(int row){
         float[] elements = new float[dimension];
-        for (int i = 0; i<dimension; i++){
+        for (int i = 0; i < dimension; i++){
             elements[i] = this.inputs[row][i];
         }
         return elements;
@@ -136,7 +141,7 @@ public class NeuralNetwork {
             int success = 0;
             for (int i = 0; i<iterationsLimit; i++) {
                 success = 0;
-                for (int z = 0; z<nElements; z++) {
+                for (int z = 0; z < nElements; z++) {
                     analyzer = new Analyzer (getRowElements(z), wWeights, bias, vWeights, bOut, neurons, transferFunction, dimension);
                     f = analyzer.getFOutArray();
                     fOut = analyzer.getFOut();
@@ -151,8 +156,9 @@ public class NeuralNetwork {
                 quadraticError *= 0.5f;
             }
             float successPercentage = (success / (float)nElements) * 100;
+            System.out.println("Success: " + success + " Elems: " + nElements);
             Result result = new Result(analyzer, resultParser, successPercentage, quadraticError);
-            neuralNetworkCallback.success(result);
+            neuralNetworkCallback.success(result, countryList);
         }
     }
 }
